@@ -1,0 +1,5 @@
+# Remove virtual environment from being committed
+/venv
+
+# Do not include __ files
+__*
