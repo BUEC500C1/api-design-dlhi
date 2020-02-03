@@ -21,6 +21,18 @@ def test_file_integrity():
     assert objname == name
     assert objlat == lat
     assert objlon == lon
-    
 
-    
+def test_file_handler():
+    with pytest.raises(OSError):
+       AirportData(100)
+
+    with pytest.raises(FileNotFoundError):
+       AirportData('../src/csv/file_not_here.csv')
+
+    with pytest.raises(IOError):
+       AirportData('../src/csv/empty_airports.csv')
+
+def test_get_code_data():
+    airportObj = AirportData('../src/csv/airports.csv')
+    airport = airportObj.get_code_data('KBOS')
+    assert airport[0] == 'General Edward Lawrence Logan International Airport'

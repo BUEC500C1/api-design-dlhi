@@ -14,7 +14,7 @@ class AirportData():
 
         # The airport csv data must be in the same directory as the rest of the source files
         file_check = Path(f'{directory}/{file}')
-        print(file_check)
+        
         if not file_check.is_file():
             raise FileNotFoundError(f'Errors finding airport data file.')
 
