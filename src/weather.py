@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 import requests
 
 from config import Config
@@ -43,7 +42,7 @@ class AirportWeather():
         airport_request = requests.get(url + api_url + coord).json()
 
         # Extract current weather
-        # condition can be clear, rain, foggy, etc.
+        # Description condition can be clear, rain, foggy, etc.
         condition = airport_request["weather"][0]["main"]
         desc_conditon = airport_request["weather"][0]["description"]
         # Convert Kelvin to Farenheit and round to two decimal places
@@ -73,22 +72,18 @@ class AirportWeather():
                     }
             }       
         }
+
         return airport_info
 
     def getAirportForecast(self):
-        # time_now = int(datetime.utcnow().timestamp())
-        # start_time = time_now - 86400
-        
         url = "https://api.openweathermap.org/data/2.5/forecast?"
         api_url = f"appid={weather_api_key}&"
         
         # Test using coordinates Boston with (42.3601, 71.0589)
-        ### coord = f"lat={self.latit}&lon={self.longit}&"
-        coord = f"lat=42.3601&lon=-71.0589&"
+        coord = f"lat={self.latit}&lon={self.longit}&"
+        #coord = f"lat=42.3601&lon=-71.0589&"
         
         forecast_request = requests.get(url + coord + api_url).json()
-
-        # print(json.dumps(forecast_request, indent=4, sort_keys=True))
     
         temp_list= []
         humid_list = []
@@ -103,16 +98,31 @@ class AirportWeather():
             humid_list.append(humidity)
             time_list.append(forecast_request['list'][i]['dt'] - 255600)
 
-        return time_list, humid_list, temp_list
+        forecast = {
+            "airport_forecast": {
+                "time_list": time_list,
+                "humid_list": humid_list,
+                "temp_list": temp_list
+            }
+        }
+
+        return forecast
+
+    def getWeather(self):
+        self.setAirportData()
+        airport_info = self.getAirportInfo()
+        airport_conditon = self.getAirportConditions()
+        airport_forecast = self.getAirportForecast()
+
+        data = {
+            "info": airport_info,
+            "condition": airport_conditon,
+            "forecast": airport_forecast
+        }
+
+        return data
 
 if __name__ == "__main__":
     air = AirportWeather('00A')
-    air.setAirportData()
-    info = air.getAirportInfo()
-    air.getAirportForecast()
-    # info2 = air.getAirportConditions()
-
-    # print(info)
-    # print(info2)
-    
-
+    result = air.getWeather()
+    print(json.dumps(result, indent=4, sort_keys=True))
