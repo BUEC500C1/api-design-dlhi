@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 import requests
 
 from config import Config
@@ -49,6 +50,7 @@ class AirportWeather():
         temp = f'{((airport_request["main"]["temp"] - 273.15) * (9/5) + 32):.2f}'
         humidity = airport_request["main"]['humidity']
         pressure = airport_request["main"]['pressure']
+        wind = airport_request["wind"]['speed']
 
         # Extract location info
         city = airport_request["name"]
@@ -56,13 +58,14 @@ class AirportWeather():
 
         airport_info = {
             'airport_data': {
-                
                     'conditions': {
                         'cond': condition,
                         'desc_cond': desc_conditon,
                         'temp': temp,
                         'humid': humidity,
-                        'pres': pressure
+                        'pres': pressure,
+                        'wind': wind
+
                     },
                     'loc_info': {
                         'city': city,
@@ -72,11 +75,42 @@ class AirportWeather():
         }
         return airport_info
 
+    def getAirportForecast(self):
+        # time_now = int(datetime.utcnow().timestamp())
+        # start_time = time_now - 86400
+        
+        url = "https://api.openweathermap.org/data/2.5/forecast?"
+        api_url = f"appid={weather_api_key}&"
+        
+        # Test using coordinates Boston with (42.3601, 71.0589)
+        ### coord = f"lat={self.latit}&lon={self.longit}&"
+        coord = f"lat=42.3601&lon=-71.0589&"
+        
+        forecast_request = requests.get(url + coord + api_url).json()
+    
+        temp_list= []
+        humid_list = []
+        time_list = []
+
+        for i in range(0, 23):
+            kelvin = forecast_request['list'][i]['main']['temp']
+            humidity = forecast_request['list'][i]['main']['humidity']
+            farenheit = round((kelvinforecast - 273.15) * (9/5) + 32)
+            
+            temp_list.append(farenheit)
+            humid_list.append(humidity)
+            time_list.append(forecast_request['list'][i]['dt'] - 255600)
+
+        return time_list, humid_list, time_list
+
 if __name__ == "__main__":
     air = AirportWeather('00A')
     air.setAirportData()
     info = air.getAirportInfo()
-    info2 = air.getAirportConditions()
+    air.getAirportForecast()
+    # info2 = air.getAirportConditions()
 
-    print(info)
-    print(info2)
+    # print(info)
+    # print(info2)
+    
+
