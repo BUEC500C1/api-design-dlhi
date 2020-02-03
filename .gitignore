@@ -3,3 +3,6 @@
 
 # Do not include __ files
 __*
+
+# Do not include cache files
+.pytest_cache
