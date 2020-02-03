@@ -87,6 +87,8 @@ class AirportWeather():
         coord = f"lat=42.3601&lon=-71.0589&"
         
         forecast_request = requests.get(url + coord + api_url).json()
+
+        # print(json.dumps(forecast_request, indent=4, sort_keys=True))
     
         temp_list= []
         humid_list = []
@@ -95,13 +97,13 @@ class AirportWeather():
         for i in range(0, 23):
             kelvin = forecast_request['list'][i]['main']['temp']
             humidity = forecast_request['list'][i]['main']['humidity']
-            farenheit = round((kelvinforecast - 273.15) * (9/5) + 32)
+            farenheit = round((kelvin - 273.15) * (9/5) + 32)
             
             temp_list.append(farenheit)
             humid_list.append(humidity)
             time_list.append(forecast_request['list'][i]['dt'] - 255600)
 
-        return time_list, humid_list, time_list
+        return time_list, humid_list, temp_list
 
 if __name__ == "__main__":
     air = AirportWeather('00A')
