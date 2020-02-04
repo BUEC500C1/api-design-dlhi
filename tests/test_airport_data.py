@@ -12,7 +12,7 @@ def test_file_integrity():
     
     with open('../src/csv/airports.csv', 'r', encoding='utf-8') as f:
         parser = csv.reader(f)
-        skip = next(parser)
+        next(parser)
         row = next(parser)
         gpscode, name, lat, lon = row[12], row[3], row[4], row[5]
 

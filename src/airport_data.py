@@ -1,6 +1,5 @@
 import os
 import csv
-import json
 from pathlib import Path
 
 directory = os.path.abspath(os.path.dirname(__file__))
@@ -24,7 +23,7 @@ class AirportData():
 
         with open(file_check, 'r', encoding='utf-8') as f:
             parser = csv.reader(f)
-            skiprow = next(parser)
+            next(parser)
             for row in parser:
                 # Check if in the USA
                 if row[8] == "US":
@@ -38,6 +37,3 @@ if __name__ == "__main__":
     airobj = AirportData('csv/airports.csv')
     name, lat, longi = airobj.get_code_data('00A')
     print(name, lat, longi)
-
-
-
