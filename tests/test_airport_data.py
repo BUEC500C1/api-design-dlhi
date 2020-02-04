@@ -18,6 +18,7 @@ def test_file_integrity():
 
     objname, objlat, objlon = airportObj.get_code_data(gpscode)
 
+    assert airportObj is not None
     assert objname == name
     assert objlat == lat
     assert objlon == lon

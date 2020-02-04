@@ -14,6 +14,12 @@ class AirportWeather():
         self.longit = 0
         self.airport_data = AirportData('csv/airports.csv')
 
+    def __repr__(self):
+        return f'{{"gps_code": {self.gps_code}, "name": {self.name}, "lat": {self.latit}, "long": {self.longi}}}'
+
+    def __str__(self):
+        return f"Airport: {self.name}\nGPS Code: {self.gps_code}\nCoordinates: ({self.latit}, {self.longi})"
+    
     def getAirportInfo(self):
         airport = {
             'airport': {
@@ -89,7 +95,7 @@ class AirportWeather():
         humid_list = []
         time_list = []
 
-        for i in range(0, 23):
+        for i in range(0, 24):
             kelvin = forecast_request['list'][i]['main']['temp']
             humidity = forecast_request['list'][i]['main']['humidity']
             farenheit = round((kelvin - 273.15) * (9/5) + 32)
