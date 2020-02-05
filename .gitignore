@@ -6,3 +6,6 @@ __*
 
 # Do not include cache files
 .pytest_cache
+
+# Do not include vs files
+/.vscode

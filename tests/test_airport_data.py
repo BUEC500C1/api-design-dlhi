@@ -4,12 +4,13 @@ import pytest
 
 sys.path.append('../src')
 
-from airport_data import AirportData
+from airport_data import AirportData  # noqa: E402
+
 
 # Define functions to test file airport_data.py
 def test_file_integrity():
     airportObj = AirportData('../src/csv/airports.csv')
-    
+
     with open('../src/csv/airports.csv', 'r', encoding='utf-8') as f:
         parser = csv.reader(f)
         next(parser)
@@ -23,15 +24,17 @@ def test_file_integrity():
     assert objlat == lat
     assert objlon == lon
 
+
 def test_file_handler():
     with pytest.raises(OSError):
-       AirportData(100)
+        AirportData(100)
 
     with pytest.raises(FileNotFoundError):
-       AirportData('../src/csv/file_not_here.csv')
+        AirportData('../src/csv/file_not_here.csv')
 
     with pytest.raises(IOError):
-       AirportData('../src/csv/empty_airports.csv')
+        AirportData('../src/csv/empty_airports.csv')
+
 
 def test_get_code_data():
     airportObj = AirportData('../src/csv/airports.csv')

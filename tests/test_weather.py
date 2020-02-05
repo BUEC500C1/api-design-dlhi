@@ -2,14 +2,16 @@ import sys
 
 sys.path.append('../src')
 
-from weather import AirportWeather
+from weather import AirportWeather  # noqa: E402
 
 weatherObj = AirportWeather('KBOS')
 weatherObj.setAirportData()
 
+
 # Define functions to test file weather.py
 def test_weather_obj():
     assert weatherObj is not None
+
 
 def test_getAirportInfo():
     test_info = weatherObj.getAirportInfo()

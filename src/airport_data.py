@@ -4,6 +4,7 @@ from pathlib import Path
 
 directory = os.path.abspath(os.path.dirname(__file__))
 
+
 class AirportData():
     def __init__(self, file):
         self.airport_data = {}
@@ -11,9 +12,9 @@ class AirportData():
         if not type(file) is str:
             raise OSError("Enter file name in string format.")
 
-        # The airport csv data must be in the same directory as the rest of the source files
+        # csv data must be in the same directory as the source files
         file_check = Path(f'{directory}/{file}')
-        
+
         if not file_check.is_file():
             raise FileNotFoundError(f'Errors finding airport data file.')
 
@@ -32,6 +33,7 @@ class AirportData():
 
     def get_code_data(self, gps_code):
         return self.airport_data[gps_code]
+
 
 if __name__ == "__main__":
     airobj = AirportData('csv/airports.csv')

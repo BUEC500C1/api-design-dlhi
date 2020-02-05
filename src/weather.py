@@ -6,6 +6,7 @@ from airport_data import AirportData
 
 weather_api_key = Config.OPENWEATHER_API_KEY
 
+
 class AirportWeather():
     def __init__(self, gpscode):
         self.gps_code = gpscode
@@ -15,11 +16,11 @@ class AirportWeather():
         self.airport_data = AirportData('csv/airports.csv')
 
     def __repr__(self):
-        return f'{{"gps_code": {self.gps_code}, "name": {self.name}, "lat": {self.latit}, "long": {self.longi}}}'
+        return f'{{"gps_code": {self.gps_code}, "name": {self.name}, "lat": {self.latit}, "long": {self.longi}}}'  # noqa: E501
 
     def __str__(self):
-        return f"Airport: {self.name}\nGPS Code: {self.gps_code}\nCoordinates: ({self.latit}, {self.longi})"
-    
+        return f"Airport: {self.name}\nGPS Code: {self.gps_code}\nCoordinates: ({self.latit}, {self.longi})"  # noqa: E501
+
     def getAirportInfo(self):
         airport = {
             'airport': {
@@ -39,7 +40,7 @@ class AirportWeather():
     def setAirportData(self):
         name, lati, longi = self.airport_data.get_code_data(self.gps_code)
         self.setAirport(name, lati, longi)
-    
+
     def getAirportConditions(self):
         url = "https://api.openweathermap.org/data/2.5/weather?"
         api_url = f"appid={weather_api_key}&"
@@ -52,7 +53,7 @@ class AirportWeather():
         condition = airport_request["weather"][0]["main"]
         desc_conditon = airport_request["weather"][0]["description"]
         # Convert Kelvin to Farenheit and round to two decimal places
-        temp = f'{((airport_request["main"]["temp"] - 273.15) * (9/5) + 32):.2f}'
+        temp = f'{((airport_request["main"]["temp"] - 273.15) * (9/5) + 32):.2f}'  # noqa: E501
         humidity = airport_request["main"]['humidity']
         pressure = airport_request["main"]['pressure']
         wind = airport_request["wind"]['speed']
@@ -76,7 +77,7 @@ class AirportWeather():
                         'city': city,
                         'country': country
                     }
-            }       
+            }
         }
 
         return airport_info
@@ -84,14 +85,14 @@ class AirportWeather():
     def getAirportForecast(self):
         url = "https://api.openweathermap.org/data/2.5/forecast?"
         api_url = f"appid={weather_api_key}&"
-        
+
         # Test using coordinates Boston with (42.3601, 71.0589)
         coord = f"lat={self.latit}&lon={self.longit}&"
-        #coord = f"lat=42.3601&lon=-71.0589&"
-        
+        # coord = f"lat=42.3601&lon=-71.0589&"
+
         forecast_request = requests.get(url + coord + api_url).json()
-    
-        temp_list= []
+
+        temp_list = []
         humid_list = []
         time_list = []
 
@@ -99,7 +100,7 @@ class AirportWeather():
             kelvin = forecast_request['list'][i]['main']['temp']
             humidity = forecast_request['list'][i]['main']['humidity']
             farenheit = round((kelvin - 273.15) * (9/5) + 32)
-            
+
             temp_list.append(farenheit)
             humid_list.append(humidity)
             time_list.append(forecast_request['list'][i]['dt'] - 255600)
@@ -127,6 +128,7 @@ class AirportWeather():
         }
 
         return data
+
 
 if __name__ == "__main__":
     air = AirportWeather('00A')
